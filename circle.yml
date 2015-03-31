@@ -1,0 +1,17 @@
+dependencies:
+  pre:
+    - sudo apt-get update
+    - curl -sL https://deb.nodesource.com/setup | sudo bash -
+    - sudo apt-get install -y nodejs
+    - sudo npm install -g harp
+    - sudo pip install html5validator awscli
+  override:
+    - harp compile src dist
+test:
+  override:
+    - html5validator --root dist
+deployment:
+  production:
+    branch: master
+    commands:
+        - aws s3 sync dist s3://www.fancystats.org --delete
